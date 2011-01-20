@@ -12,7 +12,7 @@ apps with the `4Store RDF database`_ easier.
 Installation
 ------------
 
-django-4store is on `PyPi`_ for `easy_install` or `buildout`::
+django-4store is on `PyPi`_ for ``easy_install`` or `buildout`_::
 
     $ easy_install django-4store
 
@@ -136,3 +136,4 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 .. _`4Store RDF database`: http://www.4store.org
 .. _`PyPI`: http://pypi.python.org/pypi?name=django-4store
+.. _`buildout`: http://www.buildout.org/
