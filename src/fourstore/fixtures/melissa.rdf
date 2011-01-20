@@ -1,0 +1,15 @@
+
+<!-- Processed by Id: cwm.py,v 1.197 2007/12/13 15:38:39 syosi Exp -->
+<!--     using base file:///Users/galpin/66laps/django-4store/src/fourstore/fixtures/melissa.n3-->
+
+
+<rdf:RDF xmlns="http://xmlns.com/foaf/0.1/"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <Person rdf:about="http://www.example.org/people/Melissa_Robinson">
+        <family>Robinson</family>
+        <given>Melissa</given>
+        <mbox>mel@miamidolphins.com</mbox>
+    </Person>
+</rdf:RDF>
