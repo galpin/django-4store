@@ -116,6 +116,13 @@ make sure that you still call the parent implementations::
             Base4StoreTest.tearDown(self)
             // do something
 
+Test Suite
+----------
+
+A test suite for django-4store is included::
+
+    $ python manage.py test fourstore
+
 License
 -------
 
