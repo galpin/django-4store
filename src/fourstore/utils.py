@@ -25,18 +25,22 @@ from os.path import join, splitext, isdir
 # Valid RDF file extensions (supported by 4s-import)
 RDF_EXTENSIONS = (".rdf", ".n3")
 
-def get_rdf_files(paths):
+def get_rdf_files(paths, recursive=False):
     """
     Get all the path of all valid RDF files in the specified list. If a
     paths is a directory, all RDF files within this directory will be
-    returned.
+    returned. Additionally, if recurive is True, the directory will be
+    searched recursively.
     """
     all_files = set()
     for path in paths:
         if isdir(path):
-            files = [join(path, f) for f in listdir(path)
-                     if splitext(join(path, f))[1] in RDF_EXTENSIONS]
-            all_files.update(set(files))
+            for f in listdir(path):
+                f = join(path, f)
+                if recursive and isdir(f):
+                    all_files.update(get_rdf_files([f]))
+                if splitext(f)[1] in RDF_EXTENSIONS:
+                    all_files.add(f)
         else:
             all_files.add(path)
     return list(all_files)

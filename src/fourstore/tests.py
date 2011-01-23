@@ -43,7 +43,6 @@ SELECT ?who WHERE { ?who a foaf:Person . }
 TEST_RESPONSE = [{u'who': URIRef('http://www.example.org/people/Melissa_Robinson')},
                  {u'who': URIRef('http://www.example.org/people/Ace_Ventura')}]
 
-
 class FourstoreTests(Base4StoreTest):
     kbfixtures = ["ace.n3", "melissa.rdf"]
 
@@ -78,6 +77,14 @@ class ManagementCommandTests(TestCase):
         all_files = get_rdf_files([fixtures_dir])
         self.assertTrue(find_first_fixture("ace.n3", APP_LABEL) in all_files)
         self.assertTrue(find_first_fixture("melissa.rdf", APP_LABEL) in all_files)
+
+    def test_get_files_recusrive(self):
+        app_dir = os.path.dirname(os.path.abspath(__file__))
+        all_files = get_rdf_files([app_dir], recursive=True)
+        fixtures_dir = os.path.join(app_dir, "fixtures")
+        self.assertTrue(os.path.join(fixtures_dir, "ace.n3") in all_files)
+        self.assertTrue(os.path.join(fixtures_dir, "melissa.rdf") in all_files)
+
 
 class FixtureTests(TestCase):
     def test_find_first_fixture(self):

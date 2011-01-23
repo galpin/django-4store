@@ -21,21 +21,28 @@
 
 from subprocess import call, check_call
 
-def start_4store_server(name, port, files=[]):
+def fourstore_httpd(name, port):
     """
-    Start a new instance of 4store, imports any specified files
-    and runs the 4s-httpd server.
+    Start the 4store HTTP server on a specified port.
     """
-    check_call(["4s-backend-setup", name])
-    check_call(["4s-backend", name])
-    if files:
-        check_call(["4s-import", name] + list(files))
     check_call(["4s-httpd", "-p", str(port), name])
 
-def stop_4store_server(name, port):
+def fourstore_kill(name, port):
     """
     Stops any running instances of 4s-backend and 4s-httpd.
     """
     call(["pkill", "-f", "4s-backend %s" % name])
     call(["pkill", "-f", "4s-httpd -p %d" % port])
 
+def fourstore_create(name):
+    """
+    Create a new 4store backend with the specified name.
+    """
+    check_call(["4s-backend-setup", name])
+    check_call(["4s-backend", name])
+
+def fourstore_import(name, files):
+    """
+    Import the files into a specified 4store knowledge base.
+    """
+    check_call(["4s-import", name] + list(files))

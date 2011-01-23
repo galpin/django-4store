@@ -12,44 +12,34 @@
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,
 # USA.
 
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
-
-from fourstore.server import start_4store_server, stop_4store_server
-from fourstore.utils import get_rdf_files
 
 import time
 import signal
 import sys
 
-HELP_MESSAGE = \
-"""Creates and starts a 4store backend and HTTP server.
+from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
 
-Importing data will overwrite existing models."""
-
+from fourstore.server import fourstore_httpd, fourstore_kill
 
 def signal_handler(signal, frame):
     print 'Shutting down 4store servers!'
-    stop_4store_server(settings.FOURSTORE_KBNAME, settings.FOURSTORE_PORT)
+    fourstore_kill(settings.FOURSTORE_KBNAME, settings.FOURSTORE_PORT)
     sys.exit(0)
 
 class Command(BaseCommand):
-    args = "<file.n3 file.rdf dir dir file.n3...>"
-    help = HELP_MESSAGE
+    help = """Starts the 4store HTTP server."""
 
     def handle(self, *args, **options):
         try:
-            files = get_rdf_files(args)
-            if files:
-                print "Importing the following files: %s." % files
-            start_4store_server(settings.FOURSTORE_KBNAME, settings.FOURSTORE_PORT, files)
+            fourstore_httpd(settings.FOURSTORE_KBNAME, settings.FOURSTORE_PORT)
             print "4store server is running at http://localhost:%d/" % settings.FOURSTORE_PORT
             print "Quit the server with CONTROL-C."
             signal.signal(signal.SIGINT, signal_handler)
