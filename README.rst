@@ -40,33 +40,25 @@ the SPARQL endpoint at the same time::
 Code that depends on this endpoint URL will continue to work during
 testing (see `Test Cases`_.)
 
-Management Command
-------------------
+Management Commands
+-------------------
 
-A simple management command is provided that quickly creates a 4store
-knowledge base, imports any specified files and starts the 4store
-HTTP server.
+Two management commands are provided that wrap the standard ``4s-*``
+commands for convenience.
 
-For example, to start a 4store server and import two files::
+The first, ``4store-import`` will create and import the specified
+files into the 4store knowledge base (in ``settings.py``)::
 
-    $ python manage.py 4store rdf/card.rdf rdf/myself.n3
-    ...
-    Importing the following files: ['rdf/card.rdf', 'rdf/myself.n3'].
-    4store[53904]: backend-setup.c:185 erased files for KB demo
-    4store[53904]: backend-setup.c:310 created RDF metadata for KB demo
-    4store server is running at http://localhost:6667/
-    Quit the server with CONTROL-C.
+    $ python manage.py 4store-import rdf/card.rdf rdf/myself.n3
 
-You can also specify directories together with files. In this case,
-all valid RDF files within the directory will be imported. This means
-that the previous example is equivalent to::
+The flag ``--recursive`` can be specified to recursively add any RDF
+files in a directory.
 
-    $ python manage.py 4store rdf/
-    ...
+Note that importing data will overwrite any existing content in the
+knowledge base.
 
-Importing data will overwrite any existing content in the knowledge
-base. If you wish to start 4store without importing any data, simply
-omit the files::
+The second command, ``4store`` will start the HTTP server on the port
+specified in ``settings.py``::
 
    $ python manage.py 4store
    ...
