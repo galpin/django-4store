@@ -16,7 +16,6 @@ setup(
     author_email = "m@66laps.com",
     packages = find_packages("src"),
     package_dir = { "": "src" },
-    package_data = { "": ["LICENSE", "*.rst"] },
     install_requires = ["setuptools"],
 
     classifiers = [
