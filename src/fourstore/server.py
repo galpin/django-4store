@@ -25,6 +25,7 @@ def fourstore_httpd(name, port):
     """
     Start the 4store HTTP server on a specified port.
     """
+    check_call(["4s-backend", name])
     check_call(["4s-httpd", "-p", str(port), name])
 
 def fourstore_kill(name, port):
