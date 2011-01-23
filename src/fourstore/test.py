@@ -36,7 +36,7 @@ class Base4StoreTest(TestCase):
     setting.SPARQL_ENDPOINT will automatically be set.
     '''
     kbname = "django_4store_test"
-    port = 6666
+    port = 8666
     kbfixtures = []
 
     def setUp(self):
