@@ -24,7 +24,9 @@ from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
-from fourstore.server import fourstore_create, fourstore_import
+from fourstore.server import \
+     fourstore_setup, fourstore_backend, \
+     fourstore_import, fourstore_kill
 from fourstore.utils import get_rdf_files
 
 HELP_MESSAGE = """Creates and imports data into a 4store knowledge base."""
@@ -43,9 +45,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         try:
             files = get_rdf_files(args, recursive=options["recursive"])
-            if files:
-                print "Importing the following files: %s." % files
-            fourstore_create(settings.FOURSTORE_KBNAME)
+            if not files:
+                raise CommandError("You must specify at least one valid RDF file.")
+            fourstore_setup(settings.FOURSTORE_KBNAME)
+            fourstore_backend(settings.FOURSTORE_KBNAME)
             fourstore_import(settings.FOURSTORE_KBNAME, files)
         except AttributeError:
             raise CommandError("You must set FOURSTORE_KBNAME and FOURSTORE_PORT in your settings.py.")
+        except OSError:
+            raise CommandError("Please ensure 4store is installed and accessible in $PATH.")
+        finally:
+            fourstore_kill(settings.FOURSTORE_KBNAME, settings.FOURSTORE_PORT)
+

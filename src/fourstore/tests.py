@@ -48,11 +48,8 @@ class FourstoreTests(Base4StoreTest):
 
     def setUp(self):
         Base4StoreTest.setUp(self)
-
         # test the HTTP server is running
         self.host = "localhost:%d" % self.port
-        self.assertEqual(200, crude_http_request(self.host, "/test/"))
-
         self.store = HTTP4Store(settings.SPARQL_ENDPOINT)
 
     def tearDown(self):
@@ -62,6 +59,8 @@ class FourstoreTests(Base4StoreTest):
         self.assertRaises(Exception, crude_http_request, self.host, "/test/")
 
     def test_sparql_query(self):
+        self.assertEqual(200, crude_http_request(self.host, "/test/"))
+
         # test a SPARQL query based against our test fixtures
         self.assertEqual(TEST_RESPONSE, self.store.sparql(TEST_SPARQL))
 

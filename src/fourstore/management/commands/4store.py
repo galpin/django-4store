@@ -27,7 +27,9 @@ import sys
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 
-from fourstore.server import fourstore_httpd, fourstore_kill
+from fourstore.server import \
+     fourstore_backend, fourstore_httpd, \
+     fourstore_kill
 
 def signal_handler(signal, frame):
     print 'Shutting down 4store servers!'
@@ -39,6 +41,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         try:
+            fourstore_backend(settings.FOURSTORE_KBNAME)
             fourstore_httpd(settings.FOURSTORE_KBNAME, settings.FOURSTORE_PORT)
             print "4store server is running at http://localhost:%d/" % settings.FOURSTORE_PORT
             print "Quit the server with CONTROL-C."
@@ -48,3 +51,6 @@ class Command(BaseCommand):
                 continue
         except AttributeError:
             raise CommandError("You must set FOURSTORE_KBNAME and FOURSTORE_PORT in your settings.py.")
+        except OSError:
+            raise CommandError("Please ensure 4store is installed and accessible in $PATH.")
+

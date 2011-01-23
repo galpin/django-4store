@@ -17,12 +17,14 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301,
 # USA.
 
-from subprocess import CalledProcessError
-
 from django.test import TestCase
 from django.conf import settings
 
-from fourstore.server import *
+from fourstore.server import \
+     fourstore_setup, fourstore_backend, \
+     fourstore_import, fourstore_httpd, \
+     fourstore_kill
+
 from fourstore.fixtures import find_first_fixture
 
 class Base4StoreTest(TestCase):
@@ -38,14 +40,16 @@ class Base4StoreTest(TestCase):
     kbfixtures = []
 
     def setUp(self):
-	try:
-            files = [find_first_fixture(f) for f in self.kbfixtures]
-            fourstore_create(self.kbname)
-            fourstore_import(self.kbname, files)
-            fourstore_httpd(self.kbname, self.port)
-            settings.SPARQL_ENDPOINT = "http://localhost:%d/" % self.port
-        except CalledProcessError:
-	    self.fail('Unable to create temporary 4store')
+        TestCase.setUp(self)
+        files = [find_first_fixture(f) for f in self.kbfixtures]
+
+        fourstore_setup(self.kbname)
+        fourstore_backend(self.kbname)
+        fourstore_import(self.kbname, files)
+        fourstore_httpd(self.kbname, self.port)
+
+        settings.SPARQL_ENDPOINT = "http://localhost:%d/" % self.port
 
     def tearDown(self):
+        TestCase.tearDown(self)
         fourstore_kill(self.kbname, self.port)

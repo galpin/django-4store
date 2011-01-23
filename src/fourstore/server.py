@@ -21,11 +21,22 @@
 
 from subprocess import call, check_call
 
+"""
+TODO migrate to Popen()
+Sending SIGKILL doesn't terminate "4s-httpd" and SIGTERM terminates
+the python test harness.
+"""
+
+def fourstore_backend(name):
+    """
+    Start a 4store backend for a specified knowledge base.
+    """
+    check_call(["4s-backend", name])
+
 def fourstore_httpd(name, port):
     """
     Start the 4store HTTP server on a specified port.
     """
-    check_call(["4s-backend", name])
     check_call(["4s-httpd", "-p", str(port), name])
 
 def fourstore_kill(name, port):
@@ -35,12 +46,11 @@ def fourstore_kill(name, port):
     call(["pkill", "-f", "4s-backend %s" % name])
     call(["pkill", "-f", "4s-httpd -p %d" % port])
 
-def fourstore_create(name):
+def fourstore_setup(name):
     """
     Create a new 4store backend with the specified name.
     """
     check_call(["4s-backend-setup", name])
-    check_call(["4s-backend", name])
 
 def fourstore_import(name, files):
     """
