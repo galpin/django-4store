@@ -35,7 +35,7 @@ You must also add two additional settings to ``settings.py``::
 It is recommended (but not required) that you also set a constant to
 the SPARQL endpoint at the same time::
 
-    SPARQL_ENDPOINT = "http://localhost:6667"
+    SPARQL_ENDPOINT = "http://localhost:6667/sparql/"
 
 Code that depends on this endpoint URL will continue to work during
 testing (see `Test Cases`_.)

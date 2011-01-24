@@ -48,7 +48,7 @@ class Base4StoreTest(TestCase):
         fourstore_import(self.kbname, files)
         fourstore_httpd(self.kbname, self.port)
 
-        settings.SPARQL_ENDPOINT = "http://localhost:%d/" % self.port
+        settings.SPARQL_ENDPOINT = "http://localhost:%d/sparql/" % self.port
 
     def tearDown(self):
         TestCase.tearDown(self)
