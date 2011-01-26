@@ -108,6 +108,32 @@ make sure that you still call the parent implementations::
             Base4StoreTest.tearDown(self)
             // do something
 
+Views
+-----
+
+`Cross-site HTTP Requests`_ are typically blocked by web browsers for
+many `historically well documented security reasons`_. These restrictions prevent
+web applications from communicating directly with SPARQL endpoints.
+
+django-4store provides a solution to this problem. The view
+``fourstore.views.sparql_proxy`` relays all HTTP requests it receives
+to a specified endpoint, given in ``urls.py``.
+
+For example, to communicate with `Dbpedia`_ configure ``urls.py`` as follows::
+
+    from django.conf.urls.defaults import url, patterns
+
+    urlpatterns = patterns('fourstore.views',
+        url(r"^sparql/$", "sparql_proxy", {"sparql_endpoint": "http://www.dbpedia.org/sparql/"}),
+    )
+
+Any requests made to ``http://www.yourdjangoapp.com/sparql/`` are now
+automatically relayed to ``http://www.dbpedia.org/sparql/`` and the
+response transparent sent back to the originating browser.
+
+Note that in accordance with the `SPARQL Protocol`_ all requests must have a
+``Content-Type`` of ``application/x-www-form-urlencoded``.
+
 Test Suite
 ----------
 
@@ -136,3 +162,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 .. _`4Store RDF database`: http://www.4store.org
 .. _`PyPI`: http://pypi.python.org/pypi?name=django-4store
 .. _`buildout`: http://www.buildout.org/
+.. _`Cross-site HTTP Requests`: https://developer.mozilla.org/En/HTTP_Access_Control
+.. _`historically well documented security reasons`: http://en.wikipedia.org/wiki/Cross-site_scripting#Exploit_scenarios
+.. _`Dbpedia`: http://www.dbpedia.org
+.. _`SPARQL Protocol`: http://www.w3.org/TR/rdf-sparql-protocol/

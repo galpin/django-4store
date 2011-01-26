@@ -44,3 +44,28 @@ def get_rdf_files(paths, recursive=False):
         else:
             all_files.add(path)
     return list(all_files)
+
+def reverse_django_meta_keys(meta):
+    """
+    Convert the a dict of Django ``HttpRequest.META`` headers to a dict
+    suitable for use with ``httplib``.
+
+    With the exception of ``CONTENT_TYPE`` and ``CONTENT_LENGTH``, this
+    method will convert all keys starting with ``HTTP_`` to upper-camel-case
+    and replace all underscores with hyphens. For example,
+    ``HTTP_ACCEPT_ENCODING`` becomes ``Accept-Encoding``.
+
+    A new dict is returned containing only the keys and values from the
+    original dict that match these rules.
+
+    This reverses the process internally applied by Django to a request.
+    """
+    def transform(str):
+        return "-".join([s.lower().capitalize() for s in str.split("_")])
+    http_headers = {}
+    for key in meta.keys():
+        if key.startswith("HTTP_"):
+            http_headers.update({transform(key[5:]): meta[key]})
+        elif key in ("CONTENT_TYPE", "CONTENT_LENGTH"):
+            http_headers.update({transform(key): meta[key]})
+    return http_headers

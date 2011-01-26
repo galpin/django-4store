@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name = "django-4store",
-    version = "0.2.1",
+    version = "0.3",
     url = "http://github.com/66laps/django-fourstore",
     license = "LGPL v3",
     description = "A small Django application that makes developing with the 4Store RDF database easier.",
