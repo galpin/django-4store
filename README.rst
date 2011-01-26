@@ -117,7 +117,7 @@ web applications from communicating directly with SPARQL endpoints.
 
 django-4store provides a solution to this problem. The view
 ``fourstore.views.sparql_proxy`` relays all HTTP requests it receives
-to a specified endpoint, given in ``urls.py``.
+to a specified endpoint (given in ``urls.py``).
 
 For example, to communicate with `Dbpedia`_ configure ``urls.py`` as follows::
 
